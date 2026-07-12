@@ -17,7 +17,7 @@
 #include "otpch.h"
 #include "scriptmanager.h"
 
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 
@@ -116,8 +116,8 @@ bool ScriptManager::loadSystem()
 
 bool ScriptManager::loadMods()
 {
-	boost::filesystem::path modsPath(getFilePath(FILE_TYPE_MOD));
-	if(!boost::filesystem::exists(modsPath))
+	std::filesystem::path modsPath(getFilePath(FILE_TYPE_MOD));
+	if(!std::filesystem::exists(modsPath))
 	{
 		std::clog << "[Error - ScriptManager::loadMods] Couldn't locate main directory" << std::endl;
 		return false;
@@ -125,10 +125,10 @@ bool ScriptManager::loadMods()
 
 	int32_t i = 0, j = 0;
 	bool enabled = false;
-	for(boost::filesystem::directory_iterator it(modsPath), end; it != end; ++it)
+	for(std::filesystem::directory_iterator it(modsPath), end; it != end; ++it)
 	{
 		std::string s = BOOST_DIR_ITER_FILENAME(it);
-		if(boost::filesystem::is_directory(it->status()) && (s.size() > 4 ? s.substr(s.size() - 4) : "") != ".xml")
+		if(std::filesystem::is_directory(it->status()) && (s.size() > 4 ? s.substr(s.size() - 4) : "") != ".xml")
 			continue;
 
 		std::clog << "> Loading " << s << "...";

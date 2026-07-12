@@ -25,25 +25,26 @@
 class Task
 {
 	public:
-		Task(const boost::function<void (void)>& f): m_expiration(
-			boost::date_time::not_a_date_time), m_f(f) {}
-		Task(uint32_t ms, const boost::function<void (void)>& f): m_expiration(
-			boost::get_system_time() + boost::posix_time::milliseconds(ms)), m_f(f) {}
+		Task(const boost::function<void (void)>& f): m_hasExpiration(false),
+			m_expiration(), m_f(f) {}
+		Task(uint32_t ms, const boost::function<void (void)>& f): m_hasExpiration(true),
+			m_expiration(std::chrono::steady_clock::now() + std::chrono::milliseconds(ms)), m_f(f) {}
 
 		virtual ~Task() {}
 		void operator()() {m_f();}
 
-		void unsetExpiration() {m_expiration = boost::date_time::not_a_date_time;}
+		void unsetExpiration() {m_hasExpiration = false;}
 		bool hasExpired() const
 		{
-			if(m_expiration == boost::date_time::not_a_date_time)
+			if(!m_hasExpiration)
 				return false;
 
-			return m_expiration < boost::get_system_time();
+			return m_expiration < std::chrono::steady_clock::now();
 		}
 
 	protected:
-		boost::system_time m_expiration;
+		bool m_hasExpiration;
+		std::chrono::steady_clock::time_point m_expiration;
 		boost::function<void (void)> m_f;
 };
 
@@ -84,8 +85,8 @@ class Dispatcher
 			STATE_TERMINATED
 		};
 
-		boost::mutex m_taskLock;
-		boost::condition_variable m_taskSignal;
+		std::mutex m_taskLock;
+		std::condition_variable m_taskSignal;
 
 		std::list<Task*> m_taskList;
 		static DispatcherState m_threadState;

@@ -267,7 +267,7 @@ class PoolManager
 		PoolsStats poolsStats;
 
 		#endif
-		boost::recursive_mutex poolLock;
+		std::recursive_mutex poolLock;
 };
 #endif
 #endif

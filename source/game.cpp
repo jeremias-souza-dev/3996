@@ -2303,7 +2303,7 @@ bool Game::playerCreatePrivateChannel(uint32_t playerId, ProtocolGame* pg) //CAS
 	}
 
 	for(AutoList<ProtocolGame>::const_iterator it = Player::cSpectators.begin(); it != Player::cSpectators.end(); ++it) if(it->second->getPlayer() == player)
-		it->second->publicSendMessage(player, SPEAK_PRIVATE, "O dono do cast reativou o chat da transmissão.");
+		it->second->publicSendMessage(player, SPEAK_PRIVATE, "O dono do cast reativou o chat da transmissï¿½o.");
 
 	player->sendCreatePrivateChannel(channel->getId(), channel->getName());
 	return true;

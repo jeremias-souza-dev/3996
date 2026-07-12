@@ -16,7 +16,6 @@
 ////////////////////////////////////////////////////////////////////////
 #include "otpch.h"
 #ifdef __EXCEPTION_TRACER__
-#include <boost/thread.hpp>
 #include <iostream>
 #include <fstream>
 #include <iomanip>

@@ -1,0 +1,6 @@
+[12/7/2026 15:56:57] > Usando PlainText criptografia
+[12/7/2026 15:56:57] >> Carregando RSA key
+[12/7/2026 15:56:57] >> Iniciando conexao SQL
+[12/7/2026 15:56:57] Failed connecting to database - MYSQL ERROR: Unknown database 'forgottenserver' (1049)
+
+[12/7/2026 15:56:57] > ERRO: Nao foi possivel estabelecer conexao com banco de dados SQL!

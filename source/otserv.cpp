@@ -90,9 +90,9 @@ Chat g_chat;
 Monsters g_monsters;
 Npcs g_npcs;
 
-boost::mutex g_loaderLock;
-boost::condition_variable g_loaderSignal;
-boost::unique_lock<boost::mutex> g_loaderUniqueLock(g_loaderLock);
+std::mutex g_loaderLock;
+std::condition_variable g_loaderSignal;
+std::unique_lock<std::mutex> g_loaderUniqueLock(g_loaderLock);
 std::list<std::pair<uint32_t, uint32_t> > serverIps;
 
 bool argumentsHandler(StringVec args)
@@ -266,7 +266,7 @@ int main(int argc, char* argv[])
 	g_config.startup();
 
 #ifdef __OTSERV_ALLOCATOR_STATS__
-	boost::thread(boost::bind(&allocatorStatsThread, (void*)NULL));
+	std::thread(std::bind(&allocatorStatsThread, (void*)NULL)).detach();
 	// TODO: shutdown this thread?
 #endif
 #ifdef __EXCEPTION_TRACER__
@@ -298,7 +298,7 @@ int main(int argc, char* argv[])
 	Dispatcher::getInstance().addTask(createTask(boost::bind(otserv, args, &servicer)));
 
 	g_loaderSignal.wait(g_loaderUniqueLock);
-	boost::this_thread::sleep(boost::posix_time::milliseconds(10000));
+	std::this_thread::sleep_for(std::chrono::milliseconds(10000));
 	if(servicer.isRunning())
 	{
 		std::clog << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " servidor Online!" << std::endl << std::endl;
@@ -469,6 +469,11 @@ void otserv(StringVec, ServiceManager* services)
 	{
 		g_config.setNumber(ConfigManager::ENCRYPTION, ENCRYPTION_VAHASH);
 		std::clog << "> Usando VAHash criptografia" << std::endl;
+	}
+	else if(encryptionType == "bcrypt")
+	{
+		g_config.setNumber(ConfigManager::ENCRYPTION, ENCRYPTION_BCRYPT);
+		std::clog << "> Usando Bcrypt criptografia" << std::endl;
 	}
 	else
 	{

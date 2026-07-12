@@ -32,7 +32,7 @@
 #include "configmanager.h"
 #include "game.h"
 
-boost::recursive_mutex AutoId::lock;
+std::recursive_mutex AutoId::lock;
 uint32_t AutoId::count = 1000;
 AutoId::List AutoId::list;
 

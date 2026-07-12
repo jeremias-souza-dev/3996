@@ -1,4 +1,4 @@
--- The Forgotten Server Config
+ï»¿-- The Forgotten Server Config
 
 	-- Account manager
 	accountManager = false
@@ -114,7 +114,7 @@
 	premiumPlayerSkipWaitList = false
 	max_packets_per_second = 1000
 
-    -- Anti-Divulgação
+    -- Anti-Divulgaï¿½ï¿½o
 	advertisingBlock = ".net;servegame;no-ip;.hopto;.net;.info;.org;.zapto;.me;.ddns;.pl;.biz"
 	
 	-- Anti-Push
@@ -125,7 +125,7 @@
 	-- Database
 	-- NOTE: sqlFile is used only by sqlite database, and sqlKeepAlive by mysql database.
 	-- To disable sqlKeepAlive such as mysqlReadTimeout use 0 value.
-	-- encryptionType can be plain, md5, sha1, sha256, sha512 or vahash.
+	encryptionType = "bcrypt"
 	sqlType = "sqlite"
 	sqlHost = "127.0.0.1"
 	sqlPort = 3306
@@ -137,7 +137,7 @@
 	mysqlReadTimeout = 10
 	mysqlWriteTimeout = 10
 	mysqlReconnectionAttempts = 5
-	encryptionType = "plain"
+	encryptionType = "bcrypt"
 
 	-- Deathlist
 	deathListEnabled = true

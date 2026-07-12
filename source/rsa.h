@@ -35,7 +35,7 @@ class RSA
 		void getPublicKey(char* buffer);
 
 	protected:
-		boost::recursive_mutex rsaLock;
+		std::recursive_mutex rsaLock;
 		mpz_t m_p, m_q, m_u, m_d, m_dp, m_dq, m_mod;
 };
 #endif

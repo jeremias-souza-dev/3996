@@ -26,7 +26,7 @@ Scheduler::Scheduler()
 {
 	m_lastEvent = 0;
 	Scheduler::m_threadState = STATE_RUNNING;
-	boost::thread(boost::bind(&Scheduler::schedulerThread, (void*)this));
+	std::thread(std::bind(&Scheduler::schedulerThread, (void*)this)).detach();
 }
 
 void Scheduler::schedulerThread(void* p)
@@ -38,7 +38,7 @@ void Scheduler::schedulerThread(void* p)
 	#endif
 	srand((uint32_t)OTSYS_TIME());
 
-	boost::unique_lock<boost::mutex> eventLockUnique(scheduler->m_eventLock, boost::defer_lock);
+	std::unique_lock<std::mutex> eventLockUnique(scheduler->m_eventLock, std::defer_lock);
 	while(Scheduler::m_threadState != Scheduler::STATE_TERMINATED)
 	{
 		SchedulerTask* task = NULL;
@@ -49,7 +49,7 @@ void Scheduler::schedulerThread(void* p)
 		if(scheduler->m_eventList.empty()) // unlock mutex and wait for signal
 			scheduler->m_eventSignal.wait(eventLockUnique);
 		else // unlock mutex and wait for signal or timeout
-			ret = scheduler->m_eventSignal.timed_wait(eventLockUnique, scheduler->m_eventList.top()->getCycle());
+			ret = scheduler->m_eventSignal.wait_until(eventLockUnique, scheduler->m_eventList.top()->getCycle()) == std::cv_status::no_timeout;
 
 		// the mutex is locked again now...
 		if(!ret && Scheduler::m_threadState != Scheduler::STATE_TERMINATED)

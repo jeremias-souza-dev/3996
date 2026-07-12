@@ -91,7 +91,7 @@ std::string DatabaseSQLite::_parse(const std::string& s)
 
 bool DatabaseSQLite::query(const std::string& query)
 {
-	boost::recursive_mutex::scoped_lock lockClass(sqliteLock);
+	std::lock_guard<std::recursive_mutex> lockClass(sqliteLock);
 	if(!m_connected)
 		return false;
 
@@ -125,7 +125,7 @@ bool DatabaseSQLite::query(const std::string& query)
 
 DBResult* DatabaseSQLite::storeQuery(const std::string& query)
 {
-	boost::recursive_mutex::scoped_lock lockClass(sqliteLock);
+	std::lock_guard<std::recursive_mutex> lockClass(sqliteLock);
 	if(!m_connected)
 		return NULL;
 

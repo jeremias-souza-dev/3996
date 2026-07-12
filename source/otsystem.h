@@ -31,9 +31,13 @@
 
 #include <boost/utility.hpp>
 #include <boost/asio.hpp>
-#include <boost/thread.hpp>
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
+
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <chrono>
 
 #include <cstddef>
 #include <cstdlib>

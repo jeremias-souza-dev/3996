@@ -18,7 +18,7 @@
 #include "luascript.h"
 #include "scriptmanager.h"
 
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <boost/any.hpp>
 #include <iostream>
 #include <iomanip>
@@ -736,10 +736,10 @@ bool LuaInterface::loadFile(const std::string& file, Npc* npc/* = NULL*/)
 bool LuaInterface::loadDirectory(const std::string& dir, Npc* npc/* = NULL*/, bool recursively/* = false*/)
 {
 	StringVec files;
-	for(boost::filesystem::directory_iterator it(dir), end; it != end; ++it)
+	for(std::filesystem::directory_iterator it(dir), end; it != end; ++it)
 	{
 		std::string s = BOOST_DIR_ITER_FILENAME(it);
-		if(boost::filesystem::is_directory(it->status()))
+		if(std::filesystem::is_directory(it->status()))
 		{
 			if(recursively && !loadDirectory(BOOST_DIR_ITER_FILENAME(it) + "/" + s, npc, recursively))
 				return false;
@@ -8909,7 +8909,7 @@ int32_t LuaInterface::luaIsInArray(lua_State* L)
 		}
 	}
 
-	lua_pop(L, 2);
+	lua_pop(L, 1);
 	lua_pushboolean(L, false);
 	return 1;
 }

@@ -23,6 +23,7 @@
 #include <openssl/sha.h>
 #include <openssl/md5.h>
 
+#include "bcrypt.h"
 #include "vocation.h"
 #include "configmanager.h"
 
@@ -120,6 +121,10 @@ void _encrypt(std::string& str, bool upperCase)
 		case ENCRYPTION_SHA512:
 			str = transformToSHA512(str, upperCase);
 			break;
+		case ENCRYPTION_BCRYPT:
+			// Bcrypt is verified via bcrypt::validatePassword; generating a new hash here for storage.
+			str = bcrypt::generateHash(str);
+			break;
 		default:
 		{
 			if(upperCase)
@@ -132,6 +137,11 @@ void _encrypt(std::string& str, bool upperCase)
 
 bool encryptTest(std::string plain, std::string& hash)
 {
+	// Bcrypt hashes start with $2y$ (Laravel) or $2a$/$2b$ — they are case-sensitive.
+	// We must NOT uppercase them; use the dedicated validatePassword function instead.
+	if(g_config.getNumber(ConfigManager::ENCRYPTION) == ENCRYPTION_BCRYPT)
+		return bcrypt::validatePassword(plain, hash);
+
 	std::transform(hash.begin(), hash.end(), hash.begin(), upchar);
 	_encrypt(plain, true);
 	return plain == hash;
@@ -352,7 +362,7 @@ bool hasBitSet(uint32_t flag, uint32_t flags)
 	return ((flags & flag) == flag);
 }
 
-int32_t round(float v)
+int32_t tfs_round(float v)
 {
 	int32_t t = (int32_t)std::floor(v);
 	if((v - t) > 0.5)

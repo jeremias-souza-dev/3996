@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-  <PREPROCESSOR_DEFS>__USE_MYSQL__;__USE_PGSQL__;__USE_SQLITE__;__USE_ODBC__;__EXCEPTION_TRACER__;__ENABLE_SERVER_DIAGNOSTIC__;_CRT_SECURE_NO_WARNINGS;</PREPROCESSOR_DEFS>
+  <PREPROCESSOR_DEFS>__USE_MYSQL__;__USE_SQLITE__;__USE_ODBC__;__EXCEPTION_TRACER__;__ENABLE_SERVER_DIAGNOSTIC__;_CRT_SECURE_NO_WARNINGS;_HAS_AUTO_PTR_ETC=1;</PREPROCESSOR_DEFS>
   </PropertyGroup>
   <PropertyGroup>
     <LinkIncremental>false</LinkIncremental>
@@ -22,6 +22,7 @@
     </ClCompile>
     <Link>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+      <AdditionalDependencies>lua51.lib;libmysql.lib;sqlite.lib;libxml2.lib;iconv.lib;zlib1.lib;libeay32.lib;ssleay32.lib;mpir.lib;mpirxx.lib;libboost_date_time-vc140-mt-1_59.lib;libboost_regex-vc140-mt-1_59.lib;libboost_system-vc140-mt-1_59.lib;Dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
       <PreprocessorDefinitions>$(PREPROCESSOR_DEFS)</PreprocessorDefinitions>

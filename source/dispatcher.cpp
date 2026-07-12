@@ -31,7 +31,7 @@ Dispatcher::Dispatcher()
 {
 	m_taskList.clear();
 	Dispatcher::m_threadState = Dispatcher::STATE_RUNNING;
-	boost::thread(boost::bind(&Dispatcher::dispatcherThread, (void*)this));
+	std::thread(std::bind(&Dispatcher::dispatcherThread, (void*)this)).detach();
 }
 
 void Dispatcher::dispatcherThread(void* p)
@@ -44,7 +44,7 @@ void Dispatcher::dispatcherThread(void* p)
 	srand((uint32_t)OTSYS_TIME());
 
 	OutputMessagePool* outputPool = NULL;
-	boost::unique_lock<boost::mutex> taskLockUnique(dispatcher->m_taskLock, boost::defer_lock);
+	std::unique_lock<std::mutex> taskLockUnique(dispatcher->m_taskLock, std::defer_lock);
 	while(Dispatcher::m_threadState != Dispatcher::STATE_TERMINATED)
 	{
 		Task* task = NULL;

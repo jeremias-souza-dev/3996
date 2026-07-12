@@ -30,7 +30,7 @@ class SchedulerTask : public Task
 		void setEventId(uint32_t eventId) {m_eventId = eventId;}
 		uint32_t getEventId() const {return m_eventId;}
 
-		boost::system_time getCycle() const {return m_expiration;}
+		std::chrono::steady_clock::time_point getCycle() const {return m_expiration;}
 		bool operator<(const SchedulerTask& other) const {return getCycle() > other.getCycle();}
 
 	protected:
@@ -86,8 +86,8 @@ class Scheduler
 		uint32_t m_lastEvent;
 		EventIds m_eventIds;
 
-		boost::mutex m_eventLock;
-		boost::condition_variable m_eventSignal;
+		std::mutex m_eventLock;
+		std::condition_variable m_eventSignal;
 
 		std::priority_queue<SchedulerTask*, std::vector<SchedulerTask*>, lessTask > m_eventList;
 		static SchedulerState m_threadState;
