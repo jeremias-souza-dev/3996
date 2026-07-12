@@ -151,7 +151,7 @@ bool ScriptEnviroment::saveGameState()
 	for(StorageMap::const_iterator it = m_storageMap.begin(); it != m_storageMap.end(); ++it)
 	{
 		std::stringstream ss;
-		ss << it->first << ", " << g_config.getNumber(ConfigManager::WORLD_ID) << ", " << db->escapeString(it->second).c_str();
+		ss << db->escapeString(it->first) << ", " << g_config.getNumber(ConfigManager::WORLD_ID) << ", " << db->escapeString(it->second);
 		if(!query_insert.addRow(ss))
 			return false;
 	}
