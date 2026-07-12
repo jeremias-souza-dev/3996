@@ -1,0 +1,50 @@
+# VC++ / MSBuild Output
+Debug/
+Release/
+x64/
+x86/
+ipch/
+*.aps
+*.odl
+*.obj
+*.pch
+*.vspscc
+*.vssscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.cache
+*.lk
+*.key
+*.pdb
+*.ilk
+*.dir
+*.log
+*.tlog
+*.recipe
+*.iobj
+*.ipdb
+.vs/
+
+# Compilations and Binaries
+*.exe
+*.dll
+*.rar
+*.zip
+
+# Dependency packs and libraries extracted
+include/
+lib/
+lib64/
+bin/
+bin64/
+TheForgottenServer_precompiled.zip
+vc15_pack.rar
+
+# OS-specific files
+Thumbs.db
+desktop.ini
