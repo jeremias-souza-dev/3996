@@ -22,6 +22,7 @@
     </ClCompile>
     <Link>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+      <AdditionalDependencies>libxml2.lib;libssl.lib;libcrypto.lib;libmysql.lib;sqlite3.lib;lua51.lib;gmp.lib;z.lib;ws2_32.lib;crypt32.lib;dbghelp.lib;boost_filesystem-vc143-mt-x64-1_91.lib;boost_thread-vc143-mt-x64-1_91.lib;boost_chrono-vc143-mt-x64-1_91.lib;boost_date_time-vc143-mt-x64-1_91.lib;boost_atomic-vc143-mt-x64-1_91.lib;boost_container-vc143-mt-x64-1_91.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
       <PreprocessorDefinitions>$(PREPROCESSOR_DEFS)</PreprocessorDefinitions>
