@@ -97,6 +97,8 @@ enum ConditionAttr_t
 	CONDITIONATTR_PERIODDAMAGE = 25,
 	CONDITIONATTR_BUFF = 26,
 	CONDITIONATTR_SUBID = 27,
+	CONDITIONATTR_KITICKS = 28,
+	CONDITIONATTR_KIGAIN = 29,
 
 	//reserved for serialization
 	CONDITIONATTR_END = 254
@@ -226,6 +228,7 @@ class ConditionRegeneration : public ConditionGeneric
 
 	protected:
 		uint32_t internalHealthTicks, internalManaTicks, healthTicks, manaTicks, healthGain, manaGain;
+		uint32_t internalKiTicks, kiTicks, kiGain;
 };
 
 class ConditionSoul : public ConditionGeneric

@@ -160,7 +160,7 @@ void ServicePort::handle(Acceptor_ptr acceptor, boost::asio::ip::tcp::socket* so
 
 		uint32_t remoteIp = 0;
 		if(!error)
-			remoteIp = htonl(ip.address().to_v4().to_ulong());
+			remoteIp = htonl(ip.address().to_v4().to_uint());
 
 		Connection_ptr connection;
 		if(remoteIp && ConnectionManager::getInstance()->acceptConnection(remoteIp) &&
@@ -255,7 +255,7 @@ void ServiceManager::stop()
 	{
 		try
 		{
-			m_io_service.post(boost::bind(&ServicePort::close, it->second));
+			boost::asio::post(m_io_service, boost::bind(&ServicePort::close, it->second));
 		}
 		catch(std::exception& e)
 		{
@@ -266,7 +266,7 @@ void ServiceManager::stop()
 	m_acceptors.clear();
 	OutputMessagePool::getInstance()->stop();
 
-	deathTimer.expires_from_now(boost::posix_time::seconds(3)); 
+	deathTimer.expires_after(std::chrono::seconds(3)); 
 	deathTimer.async_wait(boost::bind(&ServiceManager::die, this));
 }
 

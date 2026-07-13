@@ -6,9 +6,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\..\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\include;vcpkg_installed\x64-windows\include\libxml2;vcpkg_installed\x64-windows\include\luajit;vcpkg_installed\x64-windows\include\mysql;vcpkg_installed\x64-windows\include;$(IncludePath)</IncludePath>
     <LibraryPath Condition="'$(Platform)'=='Win32'">..\..\lib;$(LibraryPath)</LibraryPath>
-    <LibraryPath Condition="'$(Platform)'=='x64'">..\..\lib64;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Platform)'=='x64'">..\..\lib64;vcpkg_installed\x64-windows\lib;vcpkg_installed\x64-windows\debug\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
@@ -22,7 +22,7 @@
     </ClCompile>
     <Link>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
-      <AdditionalDependencies>lua51.lib;libmysql.lib;sqlite.lib;libxml2.lib;iconv.lib;zlib1.lib;libeay32.lib;ssleay32.lib;mpir.lib;mpirxx.lib;libboost_date_time-vc140-mt-1_59.lib;libboost_regex-vc140-mt-1_59.lib;libboost_system-vc140-mt-1_59.lib;Dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libxml2.lib;libssl.lib;libcrypto.lib;libmysql.lib;sqlite3.lib;lua51.lib;gmp.lib;z.lib;ws2_32.lib;crypt32.lib;dbghelp.lib;boost_filesystem-vc143-mt-x64-1_91.lib;boost_thread-vc143-mt-x64-1_91.lib;boost_chrono-vc143-mt-x64-1_91.lib;boost_date_time-vc143-mt-x64-1_91.lib;boost_atomic-vc143-mt-x64-1_91.lib;boost_container-vc143-mt-x64-1_91.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
       <PreprocessorDefinitions>$(PREPROCESSOR_DEFS)</PreprocessorDefinitions>

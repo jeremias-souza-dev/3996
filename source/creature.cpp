@@ -58,6 +58,8 @@ Creature::Creature()
 	healthMax = 1000;
 	mana = 0;
 	manaMax = 0;
+	ki = 0;
+	kiMax = 0;
 
 	lastStep = 0;
 	lastStepCost = 1;
@@ -885,6 +887,14 @@ void Creature::changeMana(int32_t manaChange)
 		mana += std::min(manaChange, getMaxMana() - mana);
 	else
 		mana = std::max((int32_t)0, mana + manaChange);
+}
+
+void Creature::changeKi(int32_t kiChange)
+{
+	if(kiChange > 0)
+		ki += std::min(kiChange, getMaxKi() - ki);
+	else
+		ki = std::max((int32_t)0, ki + kiChange);
 }
 
 bool Creature::getStorage(const std::string& key, std::string& value) const

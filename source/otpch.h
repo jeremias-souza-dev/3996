@@ -36,5 +36,9 @@
 #include <boost/regex.hpp>
 #include <boost/tokenizer.hpp>
 
+//std::shuffle (std::random_shuffle foi removido no C++17)
+#include <algorithm>
+#include <random>
+
 //otserv
 #include "thing.h"

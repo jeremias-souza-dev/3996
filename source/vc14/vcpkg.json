@@ -1,0 +1,26 @@
+{
+  "name": "theforgottenserver",
+  "version-string": "3996",
+  "dependencies": [
+    "boost-asio",
+    "boost-filesystem",
+    "boost-regex",
+    "boost-thread",
+    "boost-bind",
+    "boost-any",
+    "boost-foreach",
+    "boost-tokenizer",
+    "boost-function",
+    "boost-config",
+    "boost-utility",
+    "boost-pool",
+    "boost-system",
+    "gmp",
+    "sqlite3",
+    "libxml2",
+    "libmysql",
+    "luajit",
+    "openssl",
+    "zlib"
+  ]
+}

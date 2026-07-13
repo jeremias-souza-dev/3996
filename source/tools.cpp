@@ -299,7 +299,7 @@ bool parseXMLContentString(xmlNodePtr node, std::string& value)
 std::string getLastXMLError()
 {
 	std::stringstream ss;
-	xmlErrorPtr lastError = xmlGetLastError();
+	const xmlError* lastError = xmlGetLastError();
 	if(lastError->line)
 		ss << "Line: " << lastError->line << ", ";
 
@@ -362,7 +362,7 @@ bool hasBitSet(uint32_t flag, uint32_t flags)
 	return ((flags & flag) == flag);
 }
 
-int32_t tfs_round(float v)
+int32_t roundInt32(float v)
 {
 	int32_t t = (int32_t)std::floor(v);
 	if((v - t) > 0.5)

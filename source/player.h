@@ -86,6 +86,8 @@ enum playerinfo_t
 	PLAYERINFO_MAXHEALTH,
 	PLAYERINFO_MANA,
 	PLAYERINFO_MAXMANA,
+	PLAYERINFO_KI,
+	PLAYERINFO_MAXKI,
 	PLAYERINFO_MAGICLEVEL,
 	PLAYERINFO_MAGICLEVELPERCENT,
 	PLAYERINFO_SOUL,
@@ -207,6 +209,25 @@ class Player : public Creature, public Cylinder
 		}
 		void removeCastViewer(uint32_t id) {
 			cSpectators.erase(id);
+		}
+
+		//FUSION: reaproveita o mesmo registro estatico cSpectators usado pelo
+		//Cast para espelhar toda saida (sendXXX) automaticamente para o
+		//parceiro de fusao, sem tocar em nenhum dos ~60 metodos sendXXX.
+		void addFusionPartner(ProtocolGame* pg) {
+			cSpectators[nextSpectator] = pg;
+			nextSpectator++;
+		}
+
+		void removeFusionPartner(ProtocolGame* pg) {
+			for(AutoList<ProtocolGame>::iterator it = cSpectators.begin(); it != cSpectators.end(); ++it)
+			{
+				if(it->second == pg)
+				{
+					cSpectators.erase(it);
+					break;
+				}
+			}
 		}
 
 		uint32_t getCastIpByName(std::string n) {
@@ -506,6 +527,7 @@ class Player : public Creature, public Cylinder
 		virtual int32_t getSoul() const {return getPlayerInfo(PLAYERINFO_SOUL);}
 		virtual int32_t getMaxHealth() const {return getPlayerInfo(PLAYERINFO_MAXHEALTH);}
 		virtual int32_t getMaxMana() const {return getPlayerInfo(PLAYERINFO_MAXMANA);}
+		virtual int32_t getMaxKi() const {return getPlayerInfo(PLAYERINFO_MAXKI);}
 		int32_t getSoulMax() const {return soulMax;}
 
 		Item* getInventoryItem(slots_t slot) const;
@@ -605,6 +627,7 @@ class Player : public Creature, public Cylinder
 
 		virtual void changeHealth(int32_t healthChange);
 		virtual void changeMana(int32_t manaChange);
+		virtual void changeKi(int32_t kiChange);
 		void changeSoul(int32_t soulChange);
 
 		bool isPzLocked() const {return pzLocked;}
