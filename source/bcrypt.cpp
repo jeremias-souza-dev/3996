@@ -177,6 +177,7 @@ node_bcrypt(const char *key, size_t key_len, const char *salt, char *encrypted)
 		 switch (salt[1]) {
 		 case 'a': /* 'ab' should not yield the same as 'abab' */
 		 case 'b': /* cap input length at 72 bytes */
+		 case 'y': /* PHP/Laravel bcrypt() emits $2y$ - functionally identical to $2b$ */
 			 minor = salt[1];
 			 salt++;
 			 break;

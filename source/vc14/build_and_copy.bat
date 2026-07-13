@@ -34,18 +34,14 @@ echo Build Succeeded!
 
 rem Copy the built executable to the server folder
 if "%PLATFORM%"=="x64" (
-    if exist "x64\Release\theforgottenserver-x64.exe" (
-        copy /y "x64\Release\theforgottenserver-x64.exe" "..\..\..\Servidor Dragon Ball Z\TheForgottenServer.exe"
-    ) else if exist "x64\Release\theforgottenserver.exe" (
-        copy /y "x64\Release\theforgottenserver.exe" "..\..\..\Servidor Dragon Ball Z\TheForgottenServer.exe"
+    if exist "x64\Release\DragonBallJS-x64.exe" (
+        copy /y "x64\Release\DragonBallJS-x64.exe" "..\..\..\Servidor Dragon Ball Z\DragonBallJS.exe"
     ) else (
         echo Built executable not found in x64\Release!
     )
 ) else (
-    if exist "Release\theforgottenserver-Win32.exe" (
-        copy /y "Release\theforgottenserver-Win32.exe" "..\..\..\Servidor Dragon Ball Z\TheForgottenServer.exe"
-    ) else if exist "Release\theforgottenserver.exe" (
-        copy /y "Release\theforgottenserver.exe" "..\..\..\Servidor Dragon Ball Z\TheForgottenServer.exe"
+    if exist "Release\DragonBallJS-Win32.exe" (
+        copy /y "Release\DragonBallJS-Win32.exe" "..\..\..\Servidor Dragon Ball Z\DragonBallJS.exe"
     ) else (
         echo Built executable not found in Release!
     )

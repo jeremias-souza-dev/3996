@@ -127,8 +127,7 @@ bool argumentsHandler(StringVec args)
 		{
 			std::clog << SOFTWARE_NAME << ", Versao " << SOFTWARE_VERSION << " (" << SOFTWARE_CODENAME << ")\n"
 			"Compilado com " << BOOST_COMPILER << " em " << __DATE__ << ", " << __TIME__ << ".\n"
-			"TFS editada totalmente por Night nome real Yan Liima.\n"
-			"Visite nosso forum para atualizacoes, suporte e recursos: xtibia.com ou tibiaking.com\n\n";
+			"TFS editada totalmente por Jeremias de Souza.\n\n";
 			return false;
 		}
 
@@ -334,8 +333,7 @@ void otserv(StringVec, ServiceManager* services)
 
 	std::clog << SOFTWARE_NAME << ", Versao " << SOFTWARE_VERSION << " (" << SOFTWARE_CODENAME << ")\n"
 		"Compilado com " << BOOST_COMPILER << " em " << __DATE__ << ", " << __TIME__ << ".\n"
-		"TFS editada totalmente por Night nome real Yan Liima.\n"
-		"Visite nosso forum para atualizacoes, suporte e recursos: xtibia.com ou tibiaking.com\n\n";
+		"TFS editada totalmente por Jeremias de Souza.\n\n";
 
 	std::stringstream ss;
 #ifdef __DEBUG__
@@ -408,7 +406,7 @@ void otserv(StringVec, ServiceManager* services)
 	}
 
 	std::stringstream mutexName;
-	mutexName << "forgottenserver_" << g_config.getNumber(ConfigManager::WORLD_ID);
+	mutexName << "dragonballjs_" << g_config.getNumber(ConfigManager::WORLD_ID);
 
 	CreateMutex(NULL, FALSE, mutexName.str().c_str());
 	if(GetLastError() == ERROR_ALREADY_EXISTS)

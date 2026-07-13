@@ -22,7 +22,7 @@
 #define CLIENT_VERSION_MAX 860
 #define CLIENT_VERSION_STRING "Only clients with protocol 8.6 allowed!"
 
-#define SOFTWARE_NAME "The Forgotten Server"
+#define SOFTWARE_NAME "Dragon Ball JS"
 #define SOFTWARE_VERSION "0.4_SVN"
 #define SOFTWARE_CODENAME "rev3996"
 #define SOFTWARE_PROTOCOL "8.6"
