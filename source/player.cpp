@@ -183,6 +183,10 @@ void Player::setVocation(uint32_t id)
 		condition->setParam(CONDITIONPARAM_HEALTHTICKS, (vocation->getGainTicks(GAIN_HEALTH) * 1000));
 		condition->setParam(CONDITIONPARAM_MANAGAIN, vocation->getGainAmount(GAIN_MANA));
 		condition->setParam(CONDITIONPARAM_MANATICKS, (vocation->getGainTicks(GAIN_MANA) * 1000));
+
+		//Ki nao depende de vocacao: regenera ~1% do maximo a cada 2 segundos
+		condition->setParam(CONDITIONPARAM_KIGAIN, std::max((int32_t)1, getMaxKi() / 100));
+		condition->setParam(CONDITIONPARAM_KITICKS, 2000);
 	}
 }
 
@@ -532,7 +536,7 @@ void Player::sendIcons() const
 			icons |= (*it)->getIcons();
 	}
 
-	if(getZone() == ZONE_PROTECTION) //Se preciso deixa só esse
+	if(getZone() == ZONE_PROTECTION) //Se preciso deixa sï¿½ esse
 	{
 		icons |= ICON_PROTECTIONZONE; //E esse, by Yan Liima.
 		if(hasBitSet(ICON_SWORDS, icons))
@@ -614,6 +618,10 @@ int32_t Player::getPlayerInfo(playerinfo_t playerinfo) const
 			return mana;
 		case PLAYERINFO_MAXMANA:
 			return std::max((int32_t)0, ((int32_t)manaMax + varStats[STAT_MAXMANA]));
+		case PLAYERINFO_KI:
+			return ki;
+		case PLAYERINFO_MAXKI:
+			return std::max((int32_t)0, ((int32_t)kiMax + varStats[STAT_MAXKI]));
 		case PLAYERINFO_SOUL:
 			return std::max((int32_t)0, ((int32_t)soul + varStats[STAT_SOUL]));
 		default:
@@ -2012,6 +2020,7 @@ void Player::addExperience(uint64_t exp)
 
 	if(prevLevel != level)
 	{
+		kiMax = level * 100; //Ki nao segue ganho de vocacao, e sempre level * 100
 		updateBaseSpeed();
 		g_game.changeSpeed(this, 0);
 
@@ -2051,6 +2060,8 @@ void Player::removeExperience(uint64_t exp, bool updateStats/* = true*/)
 
 	if(prevLevel != level)
 	{
+		kiMax = level * 100; //Ki nao segue ganho de vocacao, e sempre level * 100
+		ki = std::min(ki, kiMax);
 		if(updateStats)
 		{
 			updateBaseSpeed();
@@ -2486,6 +2497,8 @@ void Player::addDefaultRegeneration(uint32_t addTicks)
 		condition->setParam(CONDITIONPARAM_HEALTHTICKS, vocation->getGainTicks(GAIN_HEALTH) * 1000);
 		condition->setParam(CONDITIONPARAM_MANAGAIN, vocation->getGainAmount(GAIN_MANA));
 		condition->setParam(CONDITIONPARAM_MANATICKS, vocation->getGainTicks(GAIN_MANA) * 1000);
+		condition->setParam(CONDITIONPARAM_KIGAIN, std::max((int32_t)1, getMaxKi() / 100));
+		condition->setParam(CONDITIONPARAM_KITICKS, 2000);
 		addCondition(condition);
 	}
 }
@@ -4135,6 +4148,12 @@ void Player::changeMana(int32_t manaChange)
 	if(!hasFlag(PlayerFlag_HasInfiniteMana))
 		Creature::changeMana(manaChange);
 
+	sendStats();
+}
+
+void Player::changeKi(int32_t kiChange)
+{
+	Creature::changeKi(kiChange);
 	sendStats();
 }
 

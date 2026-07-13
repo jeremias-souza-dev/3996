@@ -1885,7 +1885,7 @@ bool Npc::getRandomStep(Direction& dir)
 	if(dirList.empty())
 		return false;
 
-	std::random_shuffle(dirList.begin(), dirList.end());
+	std::shuffle(dirList.begin(), dirList.end(), std::mt19937(std::random_device{}()));
 	dir = dirList[random_range(0, dirList.size() - 1)];
 	return true;
 }

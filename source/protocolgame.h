@@ -46,8 +46,9 @@ class ProtocolGame : public Protocol
 			protocolGameCount++;
 #endif
 			player = NULL;
-			
+
 			isCast = false; //CAST
+			isFusionPartner = false; //FUSION
 			viewerName = "";
 			m_eventConnect = m_packetCount = m_packetTime = 0;
 			m_debugAssertSent = m_acceptPackets = false;
@@ -75,6 +76,9 @@ class ProtocolGame : public Protocol
 		Player* getPlayer() {return player;}  //CAST
 		bool getIsCast() {return isCast;}
 		std::string getViewerName() {return viewerName;}
+
+		bool getIsFusionPartner() {return isFusionPartner;} //FUSION
+		void setIsFusionPartner(bool f) {isFusionPartner = f;} //FUSION
 
 		void setViewerName(std::string vname) {
 			viewerName = vname;
@@ -341,6 +345,9 @@ class ProtocolGame : public Protocol
 		//CAST
 		bool isCast;
 		std::string viewerName;
+
+		//FUSION
+		bool isFusionPartner;
 
 		uint32_t m_eventConnect, m_maxSizeCount, m_packetCount, m_packetTime;
 		bool m_debugAssertSent, m_acceptPackets;

@@ -5626,7 +5626,7 @@ Position Game::getClosestFreeTile(Creature* creature, Position pos, bool extende
 		relList.push_back(PositionPair(2, 0));
 	}
 
-	std::random_shuffle(relList.begin() + 1, relList.end());
+	std::shuffle(relList.begin() + 1, relList.end(), std::mt19937(std::random_device{}()));
 	if(Player* player = creature->getPlayer())
 	{
 		for(PairVector::iterator it = relList.begin(); it != relList.end(); ++it)

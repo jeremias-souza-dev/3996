@@ -23,6 +23,7 @@
 
 #include "configmanager.h"
 #include "game.h"
+#include "database.h"
 
 extern ConfigManager g_config;
 extern Game g_game;
@@ -496,6 +497,21 @@ void Chat::removeUserFromAllChannels(Player* player)
 	}
 }
 
+static void logChatMessageForSite(uint16_t channelId, const std::string& authorName, const std::string& text)
+{
+	//Relays a curated set of public channels into `chat_messages` so the
+	//website chat bridge can pick them up and broadcast them live.
+	//5 = Game-Chat ("global" chat), 6 = Trade, 9 = Help (see data/XML/channels.xml).
+	if(channelId != 5 && channelId != 6 && channelId != 9)
+		return;
+
+	Database* db = Database::getInstance();
+	DBQuery query;
+	query << "INSERT INTO `chat_messages` (`channel_id`, `source`, `author_name`, `message`) VALUES ("
+		<< channelId << ", 'game', " << db->escapeString(authorName) << ", " << db->escapeString(text) << ")";
+	db->query(query.str());
+}
+
 bool Chat::talkToChannel(Player* player, SpeakClasses type, const std::string& text, uint16_t channelId, ProtocolGame* pg) //CAST
 {
 	if(text.empty())
@@ -547,6 +563,7 @@ bool Chat::talkToChannel(Player* player, SpeakClasses type, const std::string& t
 			}
 		}
 
+		logChatMessageForSite(channelId, player->getName(), text);
 		return channel->talk(player, type, text, 0, pg); //CAST
 	}
 
@@ -1080,7 +1097,7 @@ bool Chat::talkToChannel(Player* player, SpeakClasses type, const std::string& t
 			player->sendCancel("Only the leader of your guild can clean the guild motd.");
 	}
 	else if(text.substr(1, 8) == "commands")
-		player->sendToChannel(player, SPEAK_CHANNEL_W, "Guild comandos com parâmetros: disband, invite[nome], leave, kick[nome], revoke[nome], demote[nome], promote[nome], passleadership[nome], nick[nome, nick], setrankname[velhoNome, novoNome], setmotd[texto], cleanmotd[texto], war e balance.", CHANNEL_GUILD);
+		player->sendToChannel(player, SPEAK_CHANNEL_W, "Guild comandos com parï¿½metros: disband, invite[nome], leave, kick[nome], revoke[nome], demote[nome], promote[nome], passleadership[nome], nick[nome, nick], setrankname[velhoNome, novoNome], setmotd[texto], cleanmotd[texto], war e balance.", CHANNEL_GUILD);
 	else
 		return false;
 

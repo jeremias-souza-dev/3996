@@ -648,7 +648,7 @@ void ProtocolGame::parsePacket(NetworkMessage &msg)
 	if(player->isRemoved() && recvbyte != 0x14)
 		return;
 		
-    if(isCast && !player->isAccountManager()) { //CAST
+    if(isCast && !isFusionPartner && !player->isAccountManager()) { //CAST //FUSION: parceiro de fusao usa o switch completo abaixo
 		switch(recvbyte)
 		{
 			case 0x14:
@@ -2948,6 +2948,8 @@ void ProtocolGame::AddPlayerStats(NetworkMessage_ptr msg)
 	msg->put<char>(player->getPlayerInfo(PLAYERINFO_MAGICLEVELPERCENT));
 	msg->put<char>(player->getPlayerInfo(PLAYERINFO_SOUL));
 	msg->put<uint16_t>(player->getStaminaMinutes());
+	msg->put<uint16_t>(player->getPlayerInfo(PLAYERINFO_KI));
+	msg->put<uint16_t>(player->getPlayerInfo(PLAYERINFO_MAXKI));
 }
 
 void ProtocolGame::AddPlayerSkills(NetworkMessage_ptr msg)
@@ -3341,7 +3343,7 @@ addGameTask(&Game::parsePlayerExtendedOpcode, player->getID(), opcode, buffer);
 
 void ProtocolGame::sendExtendedOpcode(uint8_t opcode, const std::string& buffer)
 {
-// opcodes estendidos só podem ser enviados para jogadores usando otclient(otc), o tíbia(old) da cipsoft não pode entendê-los
+// opcodes estendidos sï¿½ podem ser enviados para jogadores usando otclient(otc), o tï¿½bia(old) da cipsoft nï¿½o pode entendï¿½-los
 	if(player && !player->isUsingOtclient())
 		return;
 

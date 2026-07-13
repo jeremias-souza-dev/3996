@@ -1219,8 +1219,8 @@ void CombatArea::copyArea(const MatrixArea* input, MatrixArea* output, MatrixOpe
 			{
 				//calculate new coordinates using rotation center
 				int32_t newX = x - centerX, newY = y - centerY,
-					rotatedX = round(newX * a + newY * b),
-					rotatedY = round(newX * c + newY * d);
+					rotatedX = roundInt32(newX * a + newY * b),
+					rotatedY = roundInt32(newX * c + newY * d);
 				//write in the output matrix using rotated coordinates
 				(*output)[rotatedY + rotateCenterY][rotatedX + rotateCenterX] = (*input)[y][x];
 			}

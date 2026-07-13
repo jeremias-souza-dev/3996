@@ -384,6 +384,9 @@ class LuaInterface
 		static int32_t luaDoPlayerAddSkillTry(lua_State* L);
 		static int32_t luaDoCreatureAddHealth(lua_State* L);
 		static int32_t luaDoCreatureAddMana(lua_State* L);
+		static int32_t luaDoCreatureAddKi(lua_State* L);
+		static int32_t luaDoPlayerStartFusion(lua_State* L);
+		static int32_t luaDoPlayerEndFusion(lua_State* L);
 		static int32_t luaSetCreatureMaxHealth(lua_State* L);
 		static int32_t luaSetCreatureMaxMana(lua_State* L);
 		static int32_t luaDoPlayerSetMaxCapacity(lua_State* L);
@@ -398,6 +401,7 @@ class LuaInterface
 		static int32_t luaDoPlayerSendChannelMessage(lua_State* L);
 		static int32_t luaDoPlayerSendToChannel(lua_State* L);
 		static int32_t luaDoPlayerOpenChannel(lua_State* L);
+		static int32_t luaDoChannelBroadcast(lua_State* L);
 		static int32_t luaDoPlayerAddMoney(lua_State* L);
 		static int32_t luaDoPlayerRemoveMoney(lua_State* L);
 		static int32_t luaDoPlayerTransferMoneyTo(lua_State* L);
@@ -501,6 +505,8 @@ class LuaInterface
 		static int32_t luaGetPlayerSpentMana(lua_State* L);
 		static int32_t luaGetCreatureMana(lua_State* L);
 		static int32_t luaGetCreatureMaxMana(lua_State* L);
+		static int32_t luaGetCreatureKi(lua_State* L);
+		static int32_t luaGetCreatureMaxKi(lua_State* L);
 		static int32_t luaGetCreatureHealth(lua_State* L);
 		static int32_t luaGetCreatureMaxHealth(lua_State* L);
 		static int32_t luaGetCreatureSpeed(lua_State* L);

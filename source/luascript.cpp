@@ -1459,6 +1459,12 @@ void LuaInterface::registerFunctions()
 	//getCreatureMaxMana(cid[, ignoreModifiers = false])
 	lua_register(m_luaState, "getCreatureMaxMana", LuaInterface::luaGetCreatureMaxMana);
 
+	//getCreatureKi(cid)
+	lua_register(m_luaState, "getCreatureKi", LuaInterface::luaGetCreatureKi);
+
+	//getCreatureMaxKi(cid[, ignoreModifiers = false])
+	lua_register(m_luaState, "getCreatureMaxKi", LuaInterface::luaGetCreatureMaxKi);
+
 	//getCreatureHideHealth(cid)
 	lua_register(m_luaState, "getCreatureHideHealth", LuaInterface::luaGetCreatureHideHealth);
 
@@ -1720,6 +1726,15 @@ void LuaInterface::registerFunctions()
 	//doCreatureAddMana(cid, mana)
 	lua_register(m_luaState, "doCreatureAddMana", LuaInterface::luaDoCreatureAddMana);
 
+	//doCreatureAddKi(cid, ki[, aggressive])
+	lua_register(m_luaState, "doCreatureAddKi", LuaInterface::luaDoCreatureAddKi);
+
+	//doPlayerStartFusion(guestCid, hostCid)
+	lua_register(m_luaState, "doPlayerStartFusion", LuaInterface::luaDoPlayerStartFusion);
+
+	//doPlayerEndFusion(guestCid)
+	lua_register(m_luaState, "doPlayerEndFusion", LuaInterface::luaDoPlayerEndFusion);
+
 	//setCreatureMaxHealth(cid, health)
 	lua_register(m_luaState, "setCreatureMaxHealth", LuaInterface::luaSetCreatureMaxHealth);
 
@@ -1754,6 +1769,12 @@ void LuaInterface::registerFunctions()
 
 	//doPlayerSendToChannel(cid, targetId, SpeakClasses, message, channel[, time])
 	lua_register(m_luaState, "doPlayerSendToChannel", LuaInterface::luaDoPlayerSendToChannel);
+
+	//doChannelBroadcast(channelId, nick, message, SpeakClasses)
+	//Sends a message to everyone currently in channelId, attributed to an
+	//arbitrary nick (no online Player required). Used by the site<->game
+	//chat bridge to relay messages posted from the website.
+	lua_register(m_luaState, "doChannelBroadcast", LuaInterface::luaDoChannelBroadcast);
 
 	//doPlayerOpenChannel(cid, channelId)
 	lua_register(m_luaState, "doPlayerOpenChannel", LuaInterface::luaDoPlayerOpenChannel);
@@ -4030,6 +4051,86 @@ int32_t LuaInterface::luaDoCreatureAddHealth(lua_State* L)
 	return 1;
 }
 
+int32_t LuaInterface::luaDoCreatureAddKi(lua_State* L)
+{
+	//doCreatureAddKi(uid, ki[, aggressive])
+	if(lua_gettop(L) > 2)
+		popNumber(L); //aggressive - Ki nao tem rastreio de combate por enquanto
+
+	int32_t kiChange = popNumber(L);
+	ScriptEnviroment* env = getEnv();
+	if(Creature* creature = env->getCreatureByUID(popNumber(L)))
+	{
+		creature->changeKi(kiChange);
+		lua_pushboolean(L, true);
+	}
+	else
+	{
+		errorEx(getError(LUA_ERROR_CREATURE_NOT_FOUND));
+		lua_pushboolean(L, false);
+	}
+
+	return 1;
+}
+
+int32_t LuaInterface::luaDoPlayerStartFusion(lua_State* L)
+{
+	//doPlayerStartFusion(guestCid, hostCid)
+	//Realoca a conexao do convidado para controlar o personagem do anfitriao
+	//(ambos passam a controlar o mesmo corpo), e registra a conexao dele no
+	//cSpectators do anfitriao para que toda saida (sendXXX) ja existente seja
+	//espelhada automaticamente para os dois clientes.
+	uint32_t hostId = popNumber(L);
+	ScriptEnviroment* env = getEnv();
+
+	Player* guest = env->getPlayerByUID(popNumber(L));
+	if(!guest || !guest->client)
+	{
+		errorEx(getError(LUA_ERROR_PLAYER_NOT_FOUND));
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	Player* host = env->getPlayerByUID(hostId);
+	if(!host)
+	{
+		errorEx(getError(LUA_ERROR_PLAYER_NOT_FOUND));
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	host->addFusionPartner(guest->client);
+	guest->client->setIsFusionPartner(true);
+	guest->client->setPlayer(host);
+
+	lua_pushboolean(L, true);
+	return 1;
+}
+
+int32_t LuaInterface::luaDoPlayerEndFusion(lua_State* L)
+{
+	//doPlayerEndFusion(guestCid)
+	//Restaura a conexao do convidado para controlar novamente o proprio
+	//personagem, removendo-a do cSpectators do anfitriao.
+	ScriptEnviroment* env = getEnv();
+	Player* guest = env->getPlayerByUID(popNumber(L));
+	if(!guest || !guest->client)
+	{
+		errorEx(getError(LUA_ERROR_PLAYER_NOT_FOUND));
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	if(Player* host = guest->client->getPlayer())
+		host->removeFusionPartner(guest->client);
+
+	guest->client->setIsFusionPartner(false);
+	guest->client->setPlayer(guest);
+
+	lua_pushboolean(L, true);
+	return 1;
+}
+
 int32_t LuaInterface::luaDoCreatureAddMana(lua_State* L)
 {
 	//doCreatureAddMana(uid, mana[, aggressive])
@@ -4412,6 +4513,28 @@ int32_t LuaInterface::luaDoPlayerSendToChannel(lua_State* L)
 
 	player->sendToChannel(creature, (SpeakClasses)speakClass, text, channelId, time);
 	lua_pushboolean(L, true);
+	return 1;
+}
+
+int32_t LuaInterface::luaDoChannelBroadcast(lua_State* L)
+{
+	//doChannelBroadcast(channelId, nick, message, SpeakClasses)
+	//Broadcasts a message to everyone currently in channelId, attributed to
+	//an arbitrary nick string. Unlike doPlayerSendChannelMessage/doPlayerSendToChannel,
+	//this does not require an online Player or Creature for either side.
+	uint32_t speakClass = popNumber(L);
+	std::string text = popString(L);
+	std::string nick = popString(L);
+	uint16_t channelId = popNumber(L);
+
+	ChatChannel* channel = g_chat.getChannelById(channelId);
+	if(!channel)
+	{
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	lua_pushboolean(L, channel->talk(nick, (SpeakClasses)speakClass, text));
 	return 1;
 }
 
@@ -9082,6 +9205,40 @@ int32_t LuaInterface::luaDoPlayerSetGroupId(lua_State* L)
 	else
 	{
 		errorEx(getError(LUA_ERROR_PLAYER_NOT_FOUND));
+		lua_pushboolean(L, false);
+	}
+
+	return 1;
+}
+
+int32_t LuaInterface::luaGetCreatureKi(lua_State* L)
+{
+	//getCreatureKi(cid)
+	ScriptEnviroment* env = getEnv();
+	if(Creature* creature = env->getCreatureByUID(popNumber(L)))
+		lua_pushnumber(L, creature->getKi());
+	else
+	{
+		errorEx(getError(LUA_ERROR_CREATURE_NOT_FOUND));
+		lua_pushboolean(L, false);
+	}
+
+	return 1;
+}
+
+int32_t LuaInterface::luaGetCreatureMaxKi(lua_State* L)
+{
+	//getCreatureMaxKi(cid[, ignoreModifiers = false])
+	bool ignoreModifiers = false;
+	if(lua_gettop(L) > 1)
+		ignoreModifiers = popNumber(L);
+
+	ScriptEnviroment* env = getEnv();
+	if(Creature* creature = env->getCreatureByUID(popNumber(L)))
+		lua_pushnumber(L, creature->getPlayer() && ignoreModifiers ? creature->kiMax : creature->getMaxKi());
+	else
+	{
+		errorEx(getError(LUA_ERROR_CREATURE_NOT_FOUND));
 		lua_pushboolean(L, false);
 	}
 

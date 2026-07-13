@@ -262,6 +262,8 @@ class Creature : public AutoId, virtual public Thing
 		virtual int32_t getMaxHealth() const {return healthMax;}
 		virtual int32_t getMana() const {return mana;}
 		virtual int32_t getMaxMana() const {return manaMax;}
+		virtual int32_t getKi() const {return ki;}
+		virtual int32_t getMaxKi() const {return kiMax;}
 
 		const Outfit_t getCurrentOutfit() const {return currentOutfit;}
 		void setCurrentOutfit(Outfit_t outfit) {currentOutfit = outfit;}
@@ -339,6 +341,8 @@ class Creature : public AutoId, virtual public Thing
 		void changeMaxHealth(uint32_t healthChange) {healthMax = healthChange;}
 		virtual void changeMana(int32_t manaChange);
 		void changeMaxMana(uint32_t manaChange) {manaMax = manaChange;}
+		virtual void changeKi(int32_t kiChange);
+		void changeMaxKi(uint32_t kiChange) {kiMax = kiChange;}
 
 		virtual bool getStorage(const std::string& key, std::string& value) const;
 		virtual bool setStorage(const std::string& key, const std::string& value);
@@ -482,6 +486,7 @@ class Creature : public AutoId, virtual public Thing
 		int32_t checkVector;
 		int32_t health, healthMax;
 		int32_t mana, manaMax;
+		int32_t ki, kiMax;
 
 		bool hideName, hideHealth, cannotMove;
 		SpeakClasses speakType;

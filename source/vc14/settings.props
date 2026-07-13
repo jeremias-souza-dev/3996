@@ -2,13 +2,13 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-  <PREPROCESSOR_DEFS>__USE_MYSQL__;__USE_PGSQL__;__USE_SQLITE__;__USE_ODBC__;__EXCEPTION_TRACER__;__ENABLE_SERVER_DIAGNOSTIC__;_CRT_SECURE_NO_WARNINGS;</PREPROCESSOR_DEFS>
+  <PREPROCESSOR_DEFS>__USE_MYSQL__;__USE_SQLITE__;__USE_ODBC__;__EXCEPTION_TRACER__;__ENABLE_SERVER_DIAGNOSTIC__;_CRT_SECURE_NO_WARNINGS;</PREPROCESSOR_DEFS>
   </PropertyGroup>
   <PropertyGroup>
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\..\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\include;vcpkg_installed\x64-windows\include\libxml2;vcpkg_installed\x64-windows\include\luajit;vcpkg_installed\x64-windows\include\mysql;vcpkg_installed\x64-windows\include;$(IncludePath)</IncludePath>
     <LibraryPath Condition="'$(Platform)'=='Win32'">..\..\lib;$(LibraryPath)</LibraryPath>
-    <LibraryPath Condition="'$(Platform)'=='x64'">..\..\lib64;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Platform)'=='x64'">..\..\lib64;vcpkg_installed\x64-windows\lib;vcpkg_installed\x64-windows\debug\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>

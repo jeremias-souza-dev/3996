@@ -635,6 +635,8 @@ ConditionGeneric(_id, _type, _ticks, _buff, _subId)
 {
 	internalHealthTicks = internalManaTicks = healthGain = manaGain = 0;
 	healthTicks = manaTicks = 1000;
+	internalKiTicks = kiGain = 0;
+	kiTicks = 1000;
 }
 
 void ConditionRegeneration::addCondition(Creature*, const Condition* addCondition)
@@ -650,6 +652,9 @@ void ConditionRegeneration::addCondition(Creature*, const Condition* addConditio
 
 	healthGain = conditionRegen.healthGain;
 	manaGain = conditionRegen.manaGain;
+
+	kiTicks = conditionRegen.kiTicks;
+	kiGain = conditionRegen.kiGain;
 }
 
 bool ConditionRegeneration::unserializeProp(ConditionAttr_t attr, PropStream& propStream)
@@ -696,6 +701,26 @@ bool ConditionRegeneration::unserializeProp(ConditionAttr_t attr, PropStream& pr
 			return true;
 		}
 
+		case CONDITIONATTR_KITICKS:
+		{
+			uint32_t value = 0;
+			if(!propStream.getType(value))
+				return false;
+
+			kiTicks = value;
+			return true;
+		}
+
+		case CONDITIONATTR_KIGAIN:
+		{
+			uint32_t value = 0;
+			if(!propStream.getType(value))
+				return false;
+
+			kiGain = value;
+			return true;
+		}
+
 		default:
 			break;
 	}
@@ -719,6 +744,12 @@ bool ConditionRegeneration::serialize(PropWriteStream& propWriteStream)
 
 	propWriteStream.addByte(CONDITIONATTR_MANAGAIN);
 	propWriteStream.addType(manaGain);
+
+	propWriteStream.addByte(CONDITIONATTR_KITICKS);
+	propWriteStream.addType(kiTicks);
+
+	propWriteStream.addByte(CONDITIONATTR_KIGAIN);
+	propWriteStream.addType(kiGain);
 	return true;
 }
 
@@ -736,6 +767,13 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 	{
 		internalManaTicks = 0;
 		creature->changeMana(manaGain);
+	}
+
+	internalKiTicks += interval;
+	if(internalKiTicks >= kiTicks)
+	{
+		internalKiTicks = 0;
+		creature->changeKi(kiGain);
 	}
 
 	return ConditionGeneric::executeCondition(creature, interval);
@@ -760,6 +798,14 @@ bool ConditionRegeneration::setParam(ConditionParam_t param, int32_t value)
 
 		case CONDITIONPARAM_MANATICKS:
 			manaTicks = value;
+			return true;
+
+		case CONDITIONPARAM_KIGAIN:
+			kiGain = value;
+			return true;
+
+		case CONDITIONPARAM_KITICKS:
+			kiTicks = value;
 			return true;
 
 		default:
