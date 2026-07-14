@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/boost-polygon-x64-windows-1.91.0-b582bfc6-fff3-4a2a-be51-73a979e89f81",
-  "name": "boost-polygon:x64-windows@1.91.0 b9edde86f924fc5eb7007772d10314c90de054dd97475b42d3d350a12ab99bf0",
+  "documentNamespace": "https://spdx.org/spdxdocs/boost-polygon-x64-windows-1.91.0-b614a16d-020e-4009-866f-cad78e67128e",
+  "name": "boost-polygon:x64-windows@1.91.0 b2dd10e2bf55ed520fed0cd1aa76c5449f39e8b2c56e1d2951f8c4f2c8758619",
   "creationInfo": {
     "creators": [
       "Tool: vcpkg-2026-05-27-d5b6777d666efc1a7f491babfcdab37794c1ae3e"
     ],
-    "created": "2026-07-13T19:24:53Z"
+    "created": "2026-07-14T00:41:45Z"
   },
   "relationships": [
     {
@@ -389,7 +389,7 @@
     {
       "name": "boost-polygon:x64-windows",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "b9edde86f924fc5eb7007772d10314c90de054dd97475b42d3d350a12ab99bf0",
+      "versionInfo": "b2dd10e2bf55ed520fed0cd1aa76c5449f39e8b2c56e1d2951f8c4f2c8758619",
       "downloadLocation": "NONE",
       "licenseConcluded": "BSL-1.0",
       "licenseDeclared": "NOASSERTION",

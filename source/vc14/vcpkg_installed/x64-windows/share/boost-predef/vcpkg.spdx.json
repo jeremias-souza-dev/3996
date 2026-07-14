@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/boost-predef-x64-windows-1.91.0-82877d85-1950-419a-b3e1-4d2aac82d918",
-  "name": "boost-predef:x64-windows@1.91.0 051ff9a6da32806cd9db65ccdedcb612c6d55142566dc9f7bdc43b21faf8c5a6",
+  "documentNamespace": "https://spdx.org/spdxdocs/boost-predef-x64-windows-1.91.0-e6dcecfd-d99e-4a53-ac71-65be7cca141b",
+  "name": "boost-predef:x64-windows@1.91.0 74b8daaecea6e2c03426400456594a5bd7aae651a60ed26bbbb85319a515282c",
   "creationInfo": {
     "creators": [
       "Tool: vcpkg-2026-05-27-d5b6777d666efc1a7f491babfcdab37794c1ae3e"
     ],
-    "created": "2026-07-13T18:52:26Z"
+    "created": "2026-07-14T00:18:59Z"
   },
   "relationships": [
     {
@@ -849,7 +849,7 @@
     {
       "name": "boost-predef:x64-windows",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "051ff9a6da32806cd9db65ccdedcb612c6d55142566dc9f7bdc43b21faf8c5a6",
+      "versionInfo": "74b8daaecea6e2c03426400456594a5bd7aae651a60ed26bbbb85319a515282c",
       "downloadLocation": "NONE",
       "licenseConcluded": "BSL-1.0",
       "licenseDeclared": "NOASSERTION",

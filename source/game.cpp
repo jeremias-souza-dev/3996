@@ -5223,6 +5223,23 @@ bool Game::playerSharePartyExperience(uint32_t playerId, bool activate, uint8_t)
 	return player->getParty()->setSharedExperience(player, activate);
 }
 
+bool Game::playerAnswerFusionModal(uint32_t playerId, uint32_t dialogId, uint8_t button, uint8_t /*choice*/)
+{
+	Player* player = getPlayerByID(playerId);
+	if(!player || player->isRemoved() || dialogId != FUSION_MODAL_WINDOW_ID || player->fusionInviteFrom.empty())
+		return false;
+
+	std::string requesterName = player->fusionInviteFrom;
+	player->fusionInviteFrom.clear();
+
+	if(button != 1) //0 = Recusar
+		return true;
+
+	//simula o jogador digitando "!fusion <nome>" - reaproveita 100% da
+	//logica de confirmacao/timer/host-guest ja implementada em fusion.lua
+	return playerSay(playerId, 0, SPEAK_SAY, "", "!fusion " + requesterName, NULL);
+}
+
 bool Game::playerReportBug(uint32_t playerId, std::string comment)
 {
 	Player* player = getPlayerByID(playerId);

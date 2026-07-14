@@ -93,6 +93,21 @@ class ProtocolGame : public Protocol
 			sendCreatePrivateChannel(channelId, channelName);
 		}
 
+		//FUSION: reenvia o pacote de "self appear" (id, mapa 18x14, inventario,
+		//stats, luz, VIPs) para resincronizar o cliente apos setPlayer() trocar
+		//a qual Player esta conexao aponta - sem isso o cliente continua com o
+		//mapa/knownCreatureList do personagem antigo e gera "no thing at pos".
+		void publicSendAddCreature(const Creature* creature, const Position& pos, uint32_t stackpos) {
+			sendAddCreature(creature, pos, stackpos);
+		}
+
+		//FUSION: abre no cliente do convidado o ModalWindow nativo (0xFA) com
+		//os botoes Aceitar/Recusar, usando o mesmo protocolo generico que o
+		//OTClient ja sabe desenhar (modules/game_modaldialog). Guarda quem
+		//convidou em player->fusionInviteFrom pra Game::playerAnswerFusionModal
+		//saber quem "dizer !fusion" quando o jogador clicar em Aceitar.
+		void publicSendFusionInvite(const std::string& requesterName);
+
 	private:
 		void disconnectClient(uint8_t error, const char* message);
 
@@ -160,6 +175,13 @@ class ProtocolGame : public Protocol
 		void parsePassPartyLeadership(NetworkMessage& msg);
 		void parseLeaveParty(NetworkMessage& msg);
 		void parseSharePartyExperience(NetworkMessage& msg);
+
+		//FUSION: resposta do ModalWindow (Aceitar/Recusar) enviado por
+		//publicSendFusionInvite - mesmo opcode 0xF9 que o OTClient ja usa
+		//nativamente pra qualquer ModalWindow (g_game.answerModalDialog).
+		void parseAnswerModalDialog(NetworkMessage& msg);
+		void sendModalWindow(uint32_t id, const std::string& title, const std::string& message,
+			const std::string& acceptText, uint8_t acceptId, const std::string& declineText, uint8_t declineId);
 
 		//trade methods
 		void parseRequestTrade(NetworkMessage& msg);

@@ -387,6 +387,7 @@ class LuaInterface
 		static int32_t luaDoCreatureAddKi(lua_State* L);
 		static int32_t luaDoPlayerStartFusion(lua_State* L);
 		static int32_t luaDoPlayerEndFusion(lua_State* L);
+		static int32_t luaDoPlayerSendFusionInvite(lua_State* L);
 		static int32_t luaSetCreatureMaxHealth(lua_State* L);
 		static int32_t luaSetCreatureMaxMana(lua_State* L);
 		static int32_t luaDoPlayerSetMaxCapacity(lua_State* L);

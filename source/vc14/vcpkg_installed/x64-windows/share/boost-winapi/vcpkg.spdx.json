@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/boost-winapi-x64-windows-1.91.0-37ed1aef-65bc-42b1-8021-c1c93f281e19",
-  "name": "boost-winapi:x64-windows@1.91.0 b1594c20e0b7f018c849d7389b3fa1481ef140a59885cd118873ac0d0fa163f9",
+  "documentNamespace": "https://spdx.org/spdxdocs/boost-winapi-x64-windows-1.91.0-c455a062-df3a-48e9-a8bd-8f8986e4b78b",
+  "name": "boost-winapi:x64-windows@1.91.0 aaf00295ca26e8e99ef5eca0cbcecff224463052b8a5370516ed00c1f0f5f4e9",
   "creationInfo": {
     "creators": [
       "Tool: vcpkg-2026-05-27-d5b6777d666efc1a7f491babfcdab37794c1ae3e"
     ],
-    "created": "2026-07-13T18:52:30Z"
+    "created": "2026-07-14T00:19:02Z"
   },
   "relationships": [
     {
@@ -674,7 +674,7 @@
     {
       "name": "boost-winapi:x64-windows",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "b1594c20e0b7f018c849d7389b3fa1481ef140a59885cd118873ac0d0fa163f9",
+      "versionInfo": "aaf00295ca26e8e99ef5eca0cbcecff224463052b8a5370516ed00c1f0f5f4e9",
       "downloadLocation": "NONE",
       "licenseConcluded": "BSL-1.0",
       "licenseDeclared": "NOASSERTION",

@@ -151,6 +151,11 @@ bool ChatChannel::removeUser(Player* player)
 	return true;
 }
 
+// Canal-ponte site<->jogo (ver channels.xml id 10 "Site" e chatbridge.lua/
+// ChatController no Laravel). Qualquer mensagem falada aqui e' gravada como
+// source='game' para o RelayGameChat do site pegar, sem precisar de comando.
+#define SITE_BRIDGE_CHANNEL_ID 10
+
 bool ChatChannel::talk(Player* player, SpeakClasses type, const std::string& text, uint32_t _time, ProtocolGame* pg) //CAST
 {
 	UsersMap::iterator it = m_users.find(player->getID());
@@ -168,6 +173,15 @@ bool ChatChannel::talk(Player* player, SpeakClasses type, const std::string& tex
 
 	if(hasFlag(CHANNELFLAG_LOGGED) && m_file->is_open())
 		*m_file << "[" << formatDate() << "] " << player->getName() << ": " << text << std::endl;
+
+	if(m_id == SITE_BRIDGE_CHANNEL_ID)
+	{
+		Database* db = Database::getInstance();
+		std::stringstream query;
+		query << "INSERT INTO `chat_messages` (`source`, `channel_id`, `author_name`, `message`) VALUES ('game', "
+			<< m_id << ", " << db->escapeString(player->getName()) << ", " << db->escapeString(text) << ")";
+		db->query(query.str());
+	}
 
 	return true;
 }

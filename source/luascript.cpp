@@ -1735,6 +1735,9 @@ void LuaInterface::registerFunctions()
 	//doPlayerEndFusion(guestCid)
 	lua_register(m_luaState, "doPlayerEndFusion", LuaInterface::luaDoPlayerEndFusion);
 
+	//doPlayerSendFusionInvite(cid, requesterName)
+	lua_register(m_luaState, "doPlayerSendFusionInvite", LuaInterface::luaDoPlayerSendFusionInvite);
+
 	//setCreatureMaxHealth(cid, health)
 	lua_register(m_luaState, "setCreatureMaxHealth", LuaInterface::luaSetCreatureMaxHealth);
 
@@ -4103,6 +4106,11 @@ int32_t LuaInterface::luaDoPlayerStartFusion(lua_State* L)
 	guest->client->setIsFusionPartner(true);
 	guest->client->setPlayer(host);
 
+	//resincroniza o cliente do convidado: agora ele "e" o anfitriao, entao
+	//precisa receber o mapa/inventario/stats do anfitriao do zero, senao fica
+	//com o mapa antigo (do proprio corpo) e gera erros de desync no cliente
+	guest->client->publicSendAddCreature(host, host->getPosition(), 0);
+
 	lua_pushboolean(L, true);
 	return 1;
 }
@@ -4127,6 +4135,28 @@ int32_t LuaInterface::luaDoPlayerEndFusion(lua_State* L)
 	guest->client->setIsFusionPartner(false);
 	guest->client->setPlayer(guest);
 
+	//resincroniza de volta pro proprio corpo do convidado
+	guest->client->publicSendAddCreature(guest, guest->getPosition(), 0);
+
+	lua_pushboolean(L, true);
+	return 1;
+}
+
+int32_t LuaInterface::luaDoPlayerSendFusionInvite(lua_State* L)
+{
+	//doPlayerSendFusionInvite(cid, requesterName)
+	std::string requesterName = popString(L);
+	ScriptEnviroment* env = getEnv();
+
+	Player* target = env->getPlayerByUID(popNumber(L));
+	if(!target || !target->client)
+	{
+		errorEx(getError(LUA_ERROR_PLAYER_NOT_FOUND));
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	target->client->publicSendFusionInvite(requesterName);
 	lua_pushboolean(L, true);
 	return 1;
 }

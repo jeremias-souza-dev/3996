@@ -230,6 +230,11 @@ class Player : public Creature, public Cylinder
 			}
 		}
 
+		//FUSION: nome de quem mandou o convite de fusao atualmente exibido no
+		//modal deste jogador (setado por doPlayerSendFusionInvite, lido/limpo
+		//quando a resposta do modal chega em Game::playerAnswerFusionModal).
+		std::string fusionInviteFrom;
+
 		uint32_t getCastIpByName(std::string n) {
 			for(AutoList<ProtocolGame>::iterator it = cSpectators.begin(); it != cSpectators.end(); ++it)
 				if(it->second->getViewerName() == n && it->second->getPlayer() == this)

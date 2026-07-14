@@ -957,6 +957,17 @@ enum PlayerCustomFlags
 #define PSTRG_OUTFITSID_RANGE_START	(PSTRG_RESERVED_RANGE_START + 1500)
 #define PSTRG_OUTFITSID_RANGE_SIZE	500
 
+//FUSION: id do ModalWindow (0xFA) usado pelo convite de fusao - ver
+//ProtocolGame::publicSendFusionInvite e Game::playerAnswerFusionModal
+#define FUSION_MODAL_WINDOW_ID 91005
+
+//FUSION: precisam ser identicos as constantes locais em
+//data/talkactions/scripts/fusion.lua (FUSION_GUEST_STORAGE/FUSION_HOST_STORAGE)
+//- usados por ProtocolGame::releaseProtocol pra detectar fusao ativa e
+//desfaze-la quando um dos dois lados cai/desconecta.
+#define FUSION_GUEST_STORAGE 91003
+#define FUSION_HOST_STORAGE 91004
+
 #define NETWORK_CRYPTOHEADER_SIZE 8
 #define NETWORK_RETRY_TIMEOUT 5000
 #define NETWORK_DEFAULT_SIZE 4096

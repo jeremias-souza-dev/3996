@@ -69,6 +69,20 @@ void ProtocolGame::setPlayer(Player* p)
 
 void ProtocolGame::releaseProtocol()
 {
+	//FUSION: chega aqui tanto em logout normal quanto em queda abrupta de
+	//conexao (Connection::handleReadError -> closeConnection -> aqui), entao
+	//e o unico ponto garantido pra desfazer uma fusao ativa antes que o
+	//Player de um dos lados seja destruido - sem isso a conexao do parceiro
+	//fica apontando pra um Player que vai sumir (ver bug do loop de morte).
+	if(player)
+	{
+		std::string storageValue;
+		bool isFusionHost = player->getStorage(std::to_string(FUSION_GUEST_STORAGE), storageValue) && atoi(storageValue.c_str()) > 0;
+		bool isFusionGuest = !isFusionHost && player->getStorage(std::to_string(FUSION_HOST_STORAGE), storageValue) && atoi(storageValue.c_str()) > 0;
+		if(isFusionHost || isFusionGuest)
+			g_game.playerSay(player->getID(), 0, SPEAK_SAY, "", "!unfusion", NULL);
+	}
+
 	if(player && player->client == this)
 		player->client = NULL;
 
@@ -891,6 +905,10 @@ void ProtocolGame::parsePacket(NetworkMessage &msg)
 				parseSharePartyExperience(msg);
 				break;
 
+			case 0xF9: // answer modal dialog (FUSION: aceitar/recusar convite)
+				parseAnswerModalDialog(msg);
+				break;
+
 			case 0xAA:
 				parseCreatePrivateChannel(msg);
 				break;
@@ -1649,6 +1667,52 @@ void ProtocolGame::parseSharePartyExperience(NetworkMessage& msg)
 	bool activate = msg.get<char>();
 	uint8_t unknown = msg.get<char>(); //TODO: find out what is this byte
 	addGameTask(&Game::playerSharePartyExperience, player->getID(), activate, unknown);
+}
+
+void ProtocolGame::parseAnswerModalDialog(NetworkMessage& msg)
+{
+	uint32_t dialogId = msg.get<uint32_t>();
+	uint8_t button = msg.get<char>();
+	uint8_t choice = msg.get<char>();
+	addGameTask(&Game::playerAnswerFusionModal, player->getID(), dialogId, button, choice);
+}
+
+void ProtocolGame::sendModalWindow(uint32_t id, const std::string& title, const std::string& message,
+	const std::string& acceptText, uint8_t acceptId, const std::string& declineText, uint8_t declineId)
+{
+	NetworkMessage_ptr msg = getOutputBuffer();
+	if(!msg)
+		return;
+
+	TRACK_MESSAGE(msg);
+	msg->put<char>(0xFA);
+	msg->put<uint32_t>(id);
+	msg->putString(title);
+	msg->putString(message);
+
+	msg->put<char>(2); //quantidade de botoes
+	msg->putString(acceptText);
+	msg->put<char>(acceptId);
+	msg->putString(declineText);
+	msg->put<char>(declineId);
+
+	msg->put<char>(0); //sem lista de escolhas (radio buttons)
+
+	//protocolo >970 (padrao deste cliente): escape primeiro, depois enter
+	msg->put<char>(declineId); //escape button
+	msg->put<char>(acceptId); //enter button
+
+	msg->put<char>(1); //priority: traz o modal pra frente mesmo se outro estiver aberto
+}
+
+void ProtocolGame::publicSendFusionInvite(const std::string& requesterName)
+{
+	if(!player)
+		return;
+
+	player->fusionInviteFrom = requesterName;
+	sendModalWindow(FUSION_MODAL_WINDOW_ID, "Pedido de Fusao", requesterName + " quer se fundir com voce. Aceitar?",
+		"Aceitar", 1, "Recusar", 0);
 }
 
 void ProtocolGame::parseQuests(NetworkMessage&)

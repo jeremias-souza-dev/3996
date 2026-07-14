@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/boost-multiprecision-x64-windows-1.91.0-1e38cf8b-45f3-4f65-aedc-84c6c62b86a1",
-  "name": "boost-multiprecision:x64-windows@1.91.0 7731d3c8daafb81981cf843447c384cf60863418f4c394dbf5155cbc5c30322e",
+  "documentNamespace": "https://spdx.org/spdxdocs/boost-multiprecision-x64-windows-1.91.0-af1cf3e8-df18-4fc0-9c0b-5432e21fb926",
+  "name": "boost-multiprecision:x64-windows@1.91.0 87f9b0b5fe13c4b0728241a7f1864c79872e524c40f8291bad326083da8f1448",
   "creationInfo": {
     "creators": [
       "Tool: vcpkg-2026-05-27-d5b6777d666efc1a7f491babfcdab37794c1ae3e"
     ],
-    "created": "2026-07-13T19:25:01Z"
+    "created": "2026-07-14T00:41:48Z"
   },
   "relationships": [
     {
@@ -584,7 +584,7 @@
     {
       "name": "boost-multiprecision:x64-windows",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "7731d3c8daafb81981cf843447c384cf60863418f4c394dbf5155cbc5c30322e",
+      "versionInfo": "87f9b0b5fe13c4b0728241a7f1864c79872e524c40f8291bad326083da8f1448",
       "downloadLocation": "NONE",
       "licenseConcluded": "BSL-1.0",
       "licenseDeclared": "NOASSERTION",

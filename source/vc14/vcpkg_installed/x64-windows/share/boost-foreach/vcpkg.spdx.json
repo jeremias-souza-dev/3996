@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/boost-foreach-x64-windows-1.91.0-c21e4cda-1401-4635-80db-48be0b3ec0f8",
-  "name": "boost-foreach:x64-windows@1.91.0 0cb4d59f64b06dd7cae06007572da32c8c6bbee67d9ba7f2a633ee05c1ef25ca",
+  "documentNamespace": "https://spdx.org/spdxdocs/boost-foreach-x64-windows-1.91.0-e2c6b06a-dd5a-4d29-ac5e-a3aeaccef23e",
+  "name": "boost-foreach:x64-windows@1.91.0 cfca32ab3e7729617dade8c59d088209dd025fb6f90bb37bf7190031edfbbf57",
   "creationInfo": {
     "creators": [
       "Tool: vcpkg-2026-05-27-d5b6777d666efc1a7f491babfcdab37794c1ae3e"
     ],
-    "created": "2026-07-13T18:56:04Z"
+    "created": "2026-07-14T00:21:10Z"
   },
   "relationships": [
     {
@@ -84,7 +84,7 @@
     {
       "name": "boost-foreach:x64-windows",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "0cb4d59f64b06dd7cae06007572da32c8c6bbee67d9ba7f2a633ee05c1ef25ca",
+      "versionInfo": "cfca32ab3e7729617dade8c59d088209dd025fb6f90bb37bf7190031edfbbf57",
       "downloadLocation": "NONE",
       "licenseConcluded": "BSL-1.0",
       "licenseDeclared": "NOASSERTION",

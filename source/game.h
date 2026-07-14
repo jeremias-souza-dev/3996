@@ -521,6 +521,11 @@ class Game
 		bool playerLeaveParty(uint32_t playerId, bool forced = false);
 		bool playerSharePartyExperience(uint32_t playerId, bool activate, uint8_t unknown);
 
+		//FUSION: resposta (Aceitar/Recusar) do ModalWindow aberto por
+		//ProtocolGame::publicSendFusionInvite - aceitar reaproveita o
+		//talkaction "!fusion <nome>" ja existente em fusion.lua.
+		bool playerAnswerFusionModal(uint32_t playerId, uint32_t dialogId, uint8_t button, uint8_t choice);
+
 		void kickPlayer(uint32_t playerId, bool displayEffect);
 		bool broadcastMessage(const std::string& text, MessageClasses type);
 		void showHotkeyUseMessage(Player* player, Item* item);
